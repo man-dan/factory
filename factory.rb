@@ -21,12 +21,30 @@ class Factory
       end
 
       def [](arg)
-        arg.is_a?(Fixnum) ? "#{args[arg]}" : instance_variable_get("@#{arg}")
+        arg.is_a?(Fixnum) ? instance_variable_get("@#{args[arg]}") : instance_variable_get("@#{arg}")
       end
 
       def []=(arg, val)
-        arg.is_a?(Fixnum) ? "#{args[arg]=val}" : instance_variable_set("@#{arg}", val)
+        arg.is_a?(Fixnum) ? instance_variable_set("@#{args[arg]}", val) : instance_variable_set("@#{arg}", val)
       end
+
+      def length
+        args.count
+      end
+
+      def select(&block)
+        values.select { |v| yield(v) }
+      end
+
+      def each(&block)
+        values.each { |v| yield(v) }
+      end
+
+      def each_pair(&block)
+        args.each { |arg| yield(arg,send(arg)) }
+      end
+      
+      class_eval(&block) if block_given?
     end
   end
 end
