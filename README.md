@@ -1,0 +1,1 @@
+Using Factory as Struct
